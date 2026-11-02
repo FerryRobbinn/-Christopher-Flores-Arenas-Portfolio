@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Christopher Flores Arenas | Roblox Developer</title>
+    <!-- Google Fonts: Fredoka for chunky UI, Luckiest Guy for headers -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Luckiest+Guy&display=swap" rel="stylesheet">
+    <style>
+        /* --- CSS VARIABLES: Vibrant Roblox Palette --- */
+        :root {
+            --stud-base: #3b6c9a;
+            --panel-yellow: #ffcc00;
+            --panel-blue: #00a2ff;
+            --panel-green: #00b06f;
+            --panel-red: #e2231a;
+            --panel-dark: #2a2c30;
+            --border-black: #111111;
+            --text-white: #ffffff;
+            --text-black: #111111;
+            --font-heading: 'Luckiest Guy', cursive;
+            --font-body: 'Fredoka', sans-serif;
+        }
+
+        /* --- RESET & BASE --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* TRUE 3D SQUARE STUD BACKGROUND */
+        body {
+            background-color: var(--stud-base);
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='60' height='60' fill='%233b6c9a'/%3E%3Crect x='15' y='15' width='30' height='30' fill='%232a4d6e'/%3E%3Crect x='15' y='15' width='28' height='28' fill='%234b80b5'/%3E%3Cpath d='M15,15 L43,15 L43,17 L17,17 L17,43 L15,43 Z' fill='%236fa1d1'/%3E%3C/svg%3E");
+            background-size: 60px 60px;
+            color: var(--text-white);
+            font-family: var(--font-body);
+            line-height: 1.5;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* --- START SCREEN / SPLASH SCREEN --- */
+        #start-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100vh;
+            background-color: var(--stud-base);
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='60' height='60' fill='%233b6c9a'/%3E%3Crect x='15' y='15' width='30' height='30' fill='%232a4d6e'/%3E%3Crect x='15' y='15' width='28' height='28' fill='%234b80b5'/%3E%3Cpath d='M15,15 L43,15 L43,17 L17,17 L17,43 L15,43 Z' fill='%236fa1d1'/%3E%3C/svg%3E");
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.8s ease, visibility 0.8s;
+        }
+
+        #start-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .start-title {
+            font-family: var(--font-heading);
+            font-size: 4rem;
+            margin-bottom: 30px;
+            text-align: center;
+            color: var(--text-white);
+            -webkit-text-stroke: 2px var(--border-black);
+            text-shadow: 5px 5px 0 var(--border-black);
+            padding: 0 20px;
+        }
+
+        .start-btn {
+            font-size: 2.5rem !important;
+            padding: 20px 60px !important;
+            animation: pulse-btn 1.5s infinite;
+        }
+
+        @keyframes pulse-btn {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .start-subtitle {
+            color: var(--text-white);
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-top: 20px;
+            text-shadow: 1px 1px 0 var(--border-black);
+        }
+
+        /* --- MAIN CONTENT WRAPPER --- */
+        #main-content {
+            display: none; /* Hidden until start screen is clicked */
+        }
+        #main-content.visible {
+            display: block;
+            animation: fadeIn 0.8s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Text Styling Utilities for high contrast */
+        .text-stroke {
+            -webkit-text-stroke: 2px var(--border-black);
+            text-shadow: 3px 3px 0 var(--border-black);
+            color: var(--text-white);
+        }
+
+        .text-stroke-black {
+            -webkit-text-stroke: 1px var(--border-black);
+            text-shadow: 2px 2px 0 rgba(0,0,0,0.4);
+            color: var(--text-black);
+        }
+
+        /* Universal UI Panel */
+        .ui-panel {
+            background-color: var(--panel-dark);
+            border: 4px solid var(--border-black);
+            border-radius: 12px;
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.5);
+            margin-bottom: 50px;
+            overflow: hidden;
+            transition: transform 0.2s;
+        }
+        
+        .ui-panel:hover {
+            transform: translateY(-2px);
+        }
+
+        .ui-header {
+            padding: 12px 20px;
+            border-bottom: 4px solid var(--border-black);
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* --- NAVBAR --- */
+        nav {
+            background-color: var(--text-white);
+            border-bottom: 4px solid var(--border-black);
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 6px 0 rgba(0,0,0,0.3);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        /* LOGO: White fill, Red outline */
+        .logo {
+            font-family: var(--font-heading);
+            font-size: 1.8rem;
+            color: var(--text-white); 
+            -webkit-text-stroke: 2px var(--panel-red); 
+            text-shadow: 3px 3px 0 var(--border-black); 
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-transform: uppercase;
+        }
+
+        .nav-links { display: flex; gap: 15px; }
+        
+        .nav-links a {
+            background-color: var(--panel-blue);
+            color: var(--text-white);
+            font-weight: 700;
+            text-decoration: none;
+            padding: 8px 20px;
+            border: 3px solid var(--border-black);
+            border-radius: 8px;
+            box-shadow: 0 5px 0 var(--border-black);
+            text-transform: uppercase;
+            transition: 0.1s;
+            text-shadow: 1px 1px 0 var(--border-black);
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover {
+            transform: translateY(2px);
+            box-shadow: 0 3px 0 var(--border-black);
+            background-color: #33ccff;
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 80px 8%;
+            gap: 50px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .hero-text { flex: 1; max-width: 650px; }
+
+        .status-badge {
+            display: inline-block;
+            background-color: var(--panel-green);
+            color: var(--text-white);
+            font-family: var(--font-heading);
+            padding: 8px 20px;
+            border: 3px solid var(--border-black);
+            border-radius: 8px;
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            box-shadow: 4px 4px 0 var(--border-black);
+            text-shadow: 2px 2px 0 var(--border-black);
+            transform: rotate(-2deg);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(-2deg); }
+            50% { transform: translateY(-8px) rotate(-2deg); }
+            100% { transform: translateY(0) rotate(-2deg); }
+        }
+
+        .hero-text h1 {
+            font-family: var(--font-heading);
+            font-size: 4.5rem;
+            line-height: 1.1;
+            margin-bottom: 10px;
+        }
+
+        .hero-text h2 {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            color: var(--panel-yellow);
+            margin-bottom: 25px;
+        }
+
+        .hero-text p {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 35px;
+            color: var(--text-white);
+            text-shadow: 1px 1px 0 var(--border-black);
+            background: rgba(0,0,0,0.5);
+            padding: 16px;
+            border-radius: 8px;
+            border-left: 6px solid var(--panel-yellow);
+        }
+
+        /* --- PLAYER PROFILE CARD --- */
+        .profile-container { flex: 0 0 360px; }
+
+        .player-card {
+            background-color: var(--panel-blue);
+            border: 4px solid var(--border-black);
+            border-radius: 12px;
+            box-shadow: 10px 10px 0 rgba(0,0,0,0.5);
+            transform: rotate(2deg);
+            transition: transform 0.2s;
+        }
+
+        .player-card:hover {
+            transform: rotate(0deg) scale(1.03);
+        }
+
+        .card-header {
+            background-color: var(--panel-yellow);
+            padding: 12px;
+            text-align: center;
+            font-family: var(--font-heading);
+            font-size: 1.6rem;
+            color: var(--text-black);
+            border-bottom: 4px solid var(--border-black);
+            -webkit-text-stroke: 1px var(--border-black);
+        }
+
+        .card-image-wrapper {
+            padding: 20px;
+            background-color: #0099cc;
+            border-bottom: 4px solid var(--border-black);
+            position: relative;
+        }
+        
+        .card-image-wrapper::after {
+            content: 'VERIFIED';
+            position: absolute;
+            top: 28px;
+            right: 28px;
+            background: var(--panel-red);
+            color: white;
+            font-family: var(--font-heading);
+            padding: 4px 10px;
+            border: 3px solid black;
+            border-radius: 5px;
+            transform: rotate(12deg);
+            text-shadow: 1px 1px 0 black;
+            font-size: 0.9rem;
+        }
+
+        .player-card img {
+            width: 100%;
+            border: 4px solid var(--border-black);
+            border-radius: 8px;
+            display: block;
+            aspect-ratio: 4/5;
+            object-fit: cover;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
+        }
+
+        .card-footer {
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--panel-green);
+        }
+
+        .status-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: var(--font-heading);
+            font-size: 1.3rem;
+            text-shadow: 2px 2px 0 var(--border-black);
+            color: white;
+        }
+
+        .status-dot {
+            width: 16px; height: 16px;
+            background: #00ff00;
+            border-radius: 50%;
+            border: 3px solid var(--border-black);
+        }
+
+        /* --- BUTTONS --- */
+        .btn-group { display: flex; gap: 20px; }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 32px;
+            border-radius: 8px;
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            text-decoration: none;
+            border: 4px solid var(--border-black);
+            transition: 0.1s;
+            text-shadow: 2px 2px 0 rgba(0,0,0,0.4);
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background-color: var(--panel-green);
+            color: var(--text-white);
+            box-shadow: 0 8px 0 var(--border-black);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(2px);
+            box-shadow: 0 6px 0 var(--border-black);
+            background-color: #00d184;
+        }
+
+        .btn-primary:active {
+            transform: translateY(8px);
+            box-shadow: 0 0px 0 var(--border-black);
+        }
+
+        .btn-secondary {
+            background-color: var(--panel-red);
+            color: var(--text-white);
+            box-shadow: 0 8px 0 var(--border-black);
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(2px);
+            box-shadow: 0 6px 0 var(--border-black);
+            background-color: #ff4a4a;
+        }
+
+        .btn-secondary:active {
+            transform: translateY(8px);
+            box-shadow: 0 0px 0 var(--border-black);
+        }
+
+        /* --- SECTIONS & PANELS --- */
+        section {
+            padding: 40px 8%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .panel-header-yellow { background-color: var(--panel-yellow); color: var(--text-black); text-shadow: none; }
+        .panel-header-blue { background-color: var(--panel-blue); color: var(--text-white); }
+        .panel-header-green { background-color: var(--panel-green); color: var(--text-white); }
+
+        /* ABOUT & EDUCATION */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            padding: 30px;
+            background-color: #3d4045;
+        }
+
+        .bento-item {
+            background-color: var(--text-white);
+            border: 4px solid var(--border-black);
+            border-radius: 8px;
+            padding: 25px;
+            color: var(--text-black);
+            box-shadow: 5px 5px 0 rgba(0,0,0,0.4);
+        }
+
+        .bento-item.large { grid-column: span 2; background-color: var(--panel-yellow); }
+
+        .bento-item h3 {
+            font-family: var(--font-heading);
+            font-size: 1.7rem;
+            margin-bottom: 15px;
+            color: var(--text-black);
+        }
+
+        .bento-item p { font-weight: 600; font-size: 1.05rem; margin-bottom: 10px; }
+        .bento-item strong { font-weight: 800; color: #000; }
+
+        /* SKILLS */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            padding: 30px;
+            background-color: #3d4045;
+        }
+
+        .skill-box {
+            background-color: var(--panel-blue);
+            border: 4px solid var(--border-black);
+            border-radius: 8px;
+            padding: 14px;
+            text-align: center;
+            font-family: var(--font-heading);
+            font-size: 1.25rem;
+            box-shadow: 0 6px 0 var(--border-black);
+            text-shadow: 2px 2px 0 var(--border-black);
+            transition: 0.1s;
+            cursor: default;
+        }
+
+        .skill-box:hover {
+            transform: translateY(2px);
+            box-shadow: 0 4px 0 var(--border-black);
+            background-color: #33ccff;
+        }
+
+        /* PROJECTS & STUDIO SHOWCASE */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+            gap: 25px;
+            padding: 30px;
+            background-color: #3d4045;
+        }
+
+        .project-card {
+            background-color: var(--text-white);
+            border: 4px solid var(--border-black);
+            border-radius: 10px;
+            padding: 20px;
+            color: var(--text-black);
+            box-shadow: 6px 6px 0 rgba(0,0,0,0.4);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-role {
+            background-color: var(--panel-red);
+            color: var(--text-white);
+            font-family: var(--font-heading);
+            padding: 4px 12px;
+            border: 3px solid var(--border-black);
+            border-radius: 6px;
+            display: inline-block;
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+            box-shadow: 2px 2px 0 var(--border-black);
+            text-shadow: 1px 1px 0 var(--border-black);
+            align-self: flex-start;
+        }
+
+        .project-card h3 { 
+            font-family: var(--font-heading); 
+            font-size: 1.8rem; 
+            margin-bottom: 8px;
+            color: #005f99;
+        }
+        
+        .project-card p { 
+            font-weight: 600; 
+            font-size: 1rem; 
+            margin-bottom: 16px;
+            flex-grow: 1;
+        }
+
+        /* Studio Screenshot Frames */
+        .studio-preview {
+            width: 100%;
+            height: 180px;
+            border: 3px solid var(--border-black);
+            border-radius: 6px;
+            background-color: #1e1e1e;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        .studio-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.3s;
+        }
+
+        .project-card:hover .studio-preview img {
+            transform: scale(1.05);
+        }
+
+        .studio-badge {
+            position: absolute;
+            bottom: 6px;
+            left: 6px;
+            background: rgba(0,0,0,0.8);
+            color: #fff;
+            font-family: var(--font-body);
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 4px;
+            border: 1px solid rgba(255,255,255,0.3);
+            z-index: 10;
+        }
+
+        /* CONTACT */
+        .contact-panel {
+            background-color: var(--panel-green);
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        .contact-panel h2 { 
+            font-family: var(--font-heading); 
+            font-size: 3.2rem; 
+            margin-bottom: 12px; 
+            color: var(--text-white);
+        }
+        
+        .contact-panel p { 
+            color: var(--text-white); 
+            font-size: 1.3rem; 
+            font-weight: 600;
+            margin-bottom: 25px; 
+            text-shadow: 2px 2px 0 var(--border-black);
+        }
+
+        .email-box {
+            display: inline-block;
+            padding: 16px 36px;
+            background-color: var(--text-white);
+            border: 4px solid var(--border-black);
+            border-radius: 8px;
+            font-family: var(--font-heading);
+            font-size: 1.6rem;
+            color: var(--text-black);
+            text-decoration: none;
+            box-shadow: 0 8px 0 var(--border-black);
+            transition: 0.1s;
+        }
+
+        .email-box:hover {
+            transform: translateY(2px);
+            box-shadow: 0 6px 0 var(--border-black);
+            background-color: var(--panel-yellow);
+        }
+
+        /* FOOTER */
+        footer {
+            text-align: center;
+            padding: 25px;
+            background-color: var(--text-white);
+            border-top: 4px solid var(--border-black);
+            color: var(--text-black);
+            font-family: var(--font-heading);
+            font-size: 1.2rem;
+        }
+
+        /* --- MUSIC TOGGLE BUTTON --- */
+        .music-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+            background-color: var(--panel-yellow);
+            color: var(--text-black);
+            font-family: var(--font-heading);
+            font-size: 1.2rem;
+            padding: 10px 20px;
+            border: 4px solid var(--border-black);
+            border-radius: 8px;
+            box-shadow: 0 6px 0 var(--border-black);
+            cursor: pointer;
+            transition: 0.1s;
+            text-transform: uppercase;
+            display: none; /* Hidden until start screen is clicked */
+        }
+
+        .music-btn.show {
+            display: block;
+        }
+
+        .music-btn:hover {
+            transform: translateY(2px);
+            box-shadow: 0 4px 0 var(--border-black);
+            background-color: #ffe066;
+        }
+
+        .music-btn:active {
+            transform: translateY(6px);
+            box-shadow: 0 0px 0 var(--border-black);
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 968px) {
+            .start-title { font-size: 2.5rem; }
+            .start-btn { font-size: 1.8rem !important; padding: 15px 40px !important; }
+            .hero { flex-direction: column-reverse; text-align: center; padding-top: 40px;}
+            .hero-text h1 { font-size: 3.2rem; }
+            .btn-group { justify-content: center; flex-wrap: wrap; }
+            .bento-grid { grid-template-columns: 1fr; }
+            .bento-item.large { grid-column: span 1; }
+            nav { padding: 15px; flex-direction: column; gap: 15px; }
+            .nav-links { flex-wrap: wrap; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. START SCREEN OVERLAY -->
+    <div id="start-screen">
+        <h1 class="start-title">GAME DEV CHRISTOPHER</h1>
+        <button id="start-btn" class="btn btn-primary start-btn">▶ PLAY / ENTER</button>
+        <p class="start-subtitle">Click to enable audio & enter the portfolio</p>
+    </div>
+
+    <!-- 2. MAIN CONTENT (Hidden initially) -->
+    <div id="main-content">
+        
+        <!-- BACKGROUND MUSIC -->
+        <audio id="bg-music" loop>
+            <source src="music.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+
+        <!-- MUSIC TOGGLE BUTTON -->
+        <button id="music-toggle" class="music-btn">🎵 Music: ON</button>
+
+        <!-- NAVIGATION -->
+        <nav>
+            <div class="logo">Game Dev Christopher</div>
+            <div class="nav-links">
+                <a href="#about">Profile</a>
+                <a href="#skills">Skills</a>
+                <a href="#projects">Experiences</a>
+                <a href="#contact">Connect</a>
+            </div>
+        </nav>
+
+        <!-- HERO SECTION -->
+        <header class="hero">
+            <div class="hero-text">
+                <div class="status-badge">⚡ OPEN FOR WORK</div>
+                <h1 class="text-stroke">CHRISTOPHER<br>FLORES ARENAS</h1>
+                <h2 class="text-stroke">Roblox Dev & BSIT Grad</h2>
+                <p>Building immersive, high-quality experiences on the Roblox platform. Combining a strong foundation in Information Technology with a passion for game design and systems architecture.</p>
+                
+                <div class="btn-group">
+                    <a href="#projects" class="btn btn-primary">View Showcase</a>
+                    <a href="mailto:christopherarenas20040706@gmail.com" class="btn btn-secondary">Contact Me</a>
+                </div>
+            </div>
+
+            <div class="profile-container">
+                <div class="player-card">
+                    <div class="card-header">PLAYER PROFILE</div>
+                    <div class="card-image-wrapper">
+                        <img src="profile.jpg" alt="Christopher Flores Arenas">
+                    </div>
+                    <div class="card-footer">
+                        <div class="status-info">
+                            <span class="status-dot"></span> ONLINE
+                        </div>
+                        <div class="text-stroke" style="font-size: 1.2rem;">BSIT</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- ABOUT & EDUCATION -->
+        <section id="about">
+            <div class="ui-panel">
+                <div class="ui-header panel-header-blue text-stroke">Player Info</div>
+                <div class="bento-grid">
+                    <div class="bento-item large">
+                        <h3>System Architecture & Game Design</h3>
+                        <p>Hello! I'm Christopher. I specialize in creating engaging mechanics, level design, and user interfaces within <strong>Roblox Studio</strong>.</p>
+                        <p>I approach game development with a professional, problem-solving mindset. My IT background ensures that the games I build are not only fun but also highly optimized, secure, and structurally sound.</p>
+                    </div>
+                    <div class="bento-item">
+                        <h3>Education</h3>
+                        <p><strong>Bachelor of Science in Information Technology</strong></p>
+                        <p>Nueva Ecija University of Science and Technology (NEUST) - State Campus</p>
+                        <p style="color: #b30000; font-weight: 800; margin-top: 15px;">// Major in Software Dev</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SKILLS -->
+        <section id="skills">
+            <div class="ui-panel">
+                <div class="ui-header panel-header-green text-stroke">Skill Inventory</div>
+                <div class="skills-grid">
+                    <div class="skill-box">Roblox Studio</div>
+                    <div class="skill-box">Luau (Roblox Lua)</div>
+                    <div class="skill-box">Level Design</div>
+                    <div class="skill-box">Game UI/UX</div>
+                    <div class="skill-box">OOP</div>
+                    <div class="skill-box">Database Management</div>
+                    <div class="skill-box">SDLC</div>
+                    <div class="skill-box">Debugging</div>
+                    <div class="skill-box">3D Mapping</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROJECTS -->
+        <section id="projects">
+            <div class="ui-panel">
+                <div class="ui-header panel-header-yellow text-stroke-black">Game Showcase</div>
+                <div class="projects-grid">
+                    <!-- Project 1 -->
+                    <div class="project-card">
+                        <span class="project-role">Lead Scripter</span>
+                        <h3>Combat & Systems Engine</h3>
+                        <p>Developed a fully functional lobby system, custom inventory, and optimized combat mechanics. Utilized advanced Luau scripting to handle data saving and client-server replication.</p>
+                        
+                        <div class="studio-preview">
+                            <img src="image1.jpg" alt="Roblox Studio Animation Rig">
+                            <span class="studio-badge">Rig Editor & Animation</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Project 2 -->
+                    <div class="project-card">
+                        <span class="project-role">Game Designer</span>
+                        <h3>Interface & Environment Build</h3>
+                        <p>Designed and implemented a highly interactive user interface. Created custom environmental assets and optimized the map for low-end devices to ensure smooth gameplay across platforms.</p>
+                        
+                        <div class="studio-preview">
+                            <img src="image2.jpg" alt="Roblox Studio Baseplate Building">
+                            <span class="studio-badge">Environment Building</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Project 3 -->
+                    <div class="project-card">
+                        <span class="project-role">UI/UX Dev</span>
+                        <h3>Cross-Platform UI Framework</h3>
+                        <p>Built a comprehensive user interface system from scratch, ensuring compatibility for PC, Mobile, and Console with seamless integration into backend server scripts.</p>
+                        
+                        <div class="studio-preview">
+                            <img src="image3.jpg" alt="Roblox In-Game Shop UI">
+                            <span class="studio-badge">In-Game Shop UI</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT -->
+        <section id="contact">
+            <div class="ui-panel contact-panel">
+                <h2 class="text-stroke">Contact Me</h2>
+                <p>Looking for a dedicated game developer or an IT professional? Let's build something great together.</p>
+                
+                <a href="mailto:christopherarenas20040706@gmail.com" class="email-box">
+                    christopherarenas20040706@gmail.com
+                </a>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer>
+            <p>&copy; 2024 Christopher Flores Arenas. Built from scratch.</p>
+        </footer>
+
+    </div> <!-- End Main Content -->
+
+    <!-- JAVASCRIPT FOR START SCREEN & MUSIC -->
+    <script>
+        const startScreen = document.getElementById('start-screen');
+        const startBtn = document.getElementById('start-btn');
+        const mainContent = document.getElementById('main-content');
+        const musicBtn = document.getElementById('music-toggle');
+        const bgMusic = document.getElementById('bg-music');
+        
+        let isPlaying = false;
+
+        // Set volume to 30%
+        bgMusic.volume = 0.3;
+
+        // When the user clicks "PLAY / ENTER"
+        startBtn.addEventListener('click', () => {
+            // 1. Play Music
+            bgMusic.play().then(() => {
+                isPlaying = true;
+                musicBtn.innerText = '🎵 Music: ON';
+            }).catch(err => {
+                console.log("Audio play failed:", err);
+            });
+
+            // 2. Hide Start Screen
+            startScreen.classList.add('hidden');
+
+            // 3. Show Main Content & Music Button
+            mainContent.classList.add('visible');
+            musicBtn.classList.add('show');
+        });
+
+        // Manual Music Toggle
+        musicBtn.addEventListener('click', () => {
+            if (isPlaying) {
+                bgMusic.pause();
+                musicBtn.innerText = '🎵 Music: OFF';
+                isPlaying = false;
+            } else {
+                bgMusic.play();
+                musicBtn.innerText = '🎵 Music: ON';
+                isPlaying = true;
+            }
+        });
+    </script>
+</body>
+</html>
