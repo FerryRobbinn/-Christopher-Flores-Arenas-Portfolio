@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Christopher Flores Arenas | Roblox Developer</title>
     <!-- Google Fonts: Fredoka for chunky UI, Luckiest Guy for headers -->
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Luckiest+Guy&display=swap" rel="stylesheet">
@@ -27,6 +27,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         /* TRUE 3D SQUARE STUD BACKGROUND */
@@ -53,6 +54,8 @@
             justify-content: center;
             align-items: center;
             transition: opacity 0.8s ease, visibility 0.8s;
+            padding: 20px;
+            text-align: center;
         }
 
         #start-screen.hidden {
@@ -64,17 +67,18 @@
             font-family: var(--font-heading);
             font-size: 4rem;
             margin-bottom: 30px;
-            text-align: center;
             color: var(--text-white);
             -webkit-text-stroke: 2px var(--border-black);
             text-shadow: 5px 5px 0 var(--border-black);
-            padding: 0 20px;
+            line-height: 1.1;
         }
 
         .start-btn {
             font-size: 2.5rem !important;
             padding: 20px 60px !important;
             animation: pulse-btn 1.5s infinite;
+            width: 100%;
+            max-width: 400px;
         }
 
         @keyframes pulse-btn {
@@ -93,7 +97,7 @@
 
         /* --- MAIN CONTENT WRAPPER --- */
         #main-content {
-            display: none; /* Hidden until start screen is clicked */
+            display: none; 
         }
         #main-content.visible {
             display: block;
@@ -104,7 +108,7 @@
             to { opacity: 1; }
         }
 
-        /* Text Styling Utilities for high contrast */
+        /* Text Styling Utilities */
         .text-stroke {
             -webkit-text-stroke: 2px var(--border-black);
             text-shadow: 3px 3px 0 var(--border-black);
@@ -123,7 +127,7 @@
             border: 4px solid var(--border-black);
             border-radius: 12px;
             box-shadow: 8px 8px 0 rgba(0,0,0,0.5);
-            margin-bottom: 50px;
+            margin-bottom: 40px;
             overflow: hidden;
             transition: transform 0.2s;
         }
@@ -155,42 +159,64 @@
             position: sticky;
             top: 0;
             z-index: 1000;
+            position: relative; /* For mobile menu positioning */
         }
 
-        /* LOGO: White fill, Red outline */
         .logo {
             font-family: var(--font-heading);
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             color: var(--text-white); 
             -webkit-text-stroke: 2px var(--panel-red); 
-            text-shadow: 3px 3px 0 var(--border-black); 
+            text-shadow: 2px 2px 0 var(--border-black); 
             display: flex;
             align-items: center;
-            gap: 10px;
             text-transform: uppercase;
         }
 
-        .nav-links { display: flex; gap: 15px; }
+        /* Desktop Navigation Links */
+        .nav-links { 
+            display: flex; 
+            gap: 10px; 
+        }
         
         .nav-links a {
             background-color: var(--panel-blue);
             color: var(--text-white);
             font-weight: 700;
             text-decoration: none;
-            padding: 8px 20px;
+            padding: 8px 15px;
             border: 3px solid var(--border-black);
             border-radius: 8px;
-            box-shadow: 0 5px 0 var(--border-black);
+            box-shadow: 0 4px 0 var(--border-black);
             text-transform: uppercase;
             transition: 0.1s;
             text-shadow: 1px 1px 0 var(--border-black);
-            font-size: 0.95rem;
+            font-size: 0.85rem;
         }
 
-        .nav-links a:hover {
+        .nav-links a:hover, .nav-links a:active {
             transform: translateY(2px);
-            box-shadow: 0 3px 0 var(--border-black);
+            box-shadow: 0 2px 0 var(--border-black);
             background-color: #33ccff;
+        }
+
+        /* Hamburger Menu Button (Hidden on Desktop) */
+        .hamburger {
+            display: none;
+            background-color: var(--panel-yellow);
+            color: var(--text-black);
+            font-size: 1.5rem;
+            font-family: var(--font-heading);
+            padding: 5px 15px;
+            border: 3px solid var(--border-black);
+            border-radius: 8px;
+            box-shadow: 0 4px 0 var(--border-black);
+            cursor: pointer;
+            transition: 0.1s;
+        }
+        .hamburger:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 var(--border-black);
         }
 
         /* --- HERO SECTION --- */
@@ -198,8 +224,8 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 80px 8%;
-            gap: 50px;
+            padding: 60px 5%;
+            gap: 40px;
             max-width: 1400px;
             margin: 0 auto;
         }
@@ -214,7 +240,7 @@
             padding: 8px 20px;
             border: 3px solid var(--border-black);
             border-radius: 8px;
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             margin-bottom: 20px;
             box-shadow: 4px 4px 0 var(--border-black);
             text-shadow: 2px 2px 0 var(--border-black);
@@ -230,22 +256,22 @@
 
         .hero-text h1 {
             font-family: var(--font-heading);
-            font-size: 4.5rem;
+            font-size: 4rem;
             line-height: 1.1;
             margin-bottom: 10px;
         }
 
         .hero-text h2 {
             font-family: var(--font-heading);
-            font-size: 2rem;
+            font-size: 1.8rem;
             color: var(--panel-yellow);
             margin-bottom: 25px;
         }
 
         .hero-text p {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 600;
-            margin-bottom: 35px;
+            margin-bottom: 30px;
             color: var(--text-white);
             text-shadow: 1px 1px 0 var(--border-black);
             background: rgba(0,0,0,0.5);
@@ -255,7 +281,7 @@
         }
 
         /* --- PLAYER PROFILE CARD --- */
-        .profile-container { flex: 0 0 360px; }
+        .profile-container { flex: 0 0 350px; max-width: 100%; }
 
         .player-card {
             background-color: var(--panel-blue);
@@ -275,7 +301,7 @@
             padding: 12px;
             text-align: center;
             font-family: var(--font-heading);
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             color: var(--text-black);
             border-bottom: 4px solid var(--border-black);
             -webkit-text-stroke: 1px var(--border-black);
@@ -327,7 +353,7 @@
             align-items: center;
             gap: 8px;
             font-family: var(--font-heading);
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             text-shadow: 2px 2px 0 var(--border-black);
             color: white;
         }
@@ -340,16 +366,16 @@
         }
 
         /* --- BUTTONS --- */
-        .btn-group { display: flex; gap: 20px; }
+        .btn-group { display: flex; gap: 15px; flex-wrap: wrap; }
         
         .btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 14px 32px;
+            padding: 12px 25px;
             border-radius: 8px;
             font-family: var(--font-heading);
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             text-transform: uppercase;
             text-decoration: none;
             border: 4px solid var(--border-black);
@@ -361,40 +387,30 @@
         .btn-primary {
             background-color: var(--panel-green);
             color: var(--text-white);
-            box-shadow: 0 8px 0 var(--border-black);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(2px);
             box-shadow: 0 6px 0 var(--border-black);
-            background-color: #00d184;
         }
 
-        .btn-primary:active {
-            transform: translateY(8px);
-            box-shadow: 0 0px 0 var(--border-black);
+        .btn-primary:hover, .btn-primary:active {
+            transform: translateY(2px);
+            box-shadow: 0 4px 0 var(--border-black);
+            background-color: #00d184;
         }
 
         .btn-secondary {
             background-color: var(--panel-red);
             color: var(--text-white);
-            box-shadow: 0 8px 0 var(--border-black);
-        }
-
-        .btn-secondary:hover {
-            transform: translateY(2px);
             box-shadow: 0 6px 0 var(--border-black);
-            background-color: #ff4a4a;
         }
 
-        .btn-secondary:active {
-            transform: translateY(8px);
-            box-shadow: 0 0px 0 var(--border-black);
+        .btn-secondary:hover, .btn-secondary:active {
+            transform: translateY(2px);
+            box-shadow: 0 4px 0 var(--border-black);
+            background-color: #ff4a4a;
         }
 
         /* --- SECTIONS & PANELS --- */
         section {
-            padding: 40px 8%;
+            padding: 30px 5%;
             max-width: 1400px;
             margin: 0 auto;
         }
@@ -407,8 +423,8 @@
         .bento-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 25px;
-            padding: 30px;
+            gap: 20px;
+            padding: 25px;
             background-color: #3d4045;
         }
 
@@ -416,7 +432,7 @@
             background-color: var(--text-white);
             border: 4px solid var(--border-black);
             border-radius: 8px;
-            padding: 25px;
+            padding: 20px;
             color: var(--text-black);
             box-shadow: 5px 5px 0 rgba(0,0,0,0.4);
         }
@@ -425,20 +441,20 @@
 
         .bento-item h3 {
             font-family: var(--font-heading);
-            font-size: 1.7rem;
+            font-size: 1.5rem;
             margin-bottom: 15px;
             color: var(--text-black);
         }
 
-        .bento-item p { font-weight: 600; font-size: 1.05rem; margin-bottom: 10px; }
+        .bento-item p { font-weight: 600; font-size: 1rem; margin-bottom: 10px; }
         .bento-item strong { font-weight: 800; color: #000; }
 
         /* SKILLS */
         .skills-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             gap: 15px;
-            padding: 30px;
+            padding: 25px;
             background-color: #3d4045;
         }
 
@@ -446,11 +462,11 @@
             background-color: var(--panel-blue);
             border: 4px solid var(--border-black);
             border-radius: 8px;
-            padding: 14px;
+            padding: 12px;
             text-align: center;
             font-family: var(--font-heading);
-            font-size: 1.25rem;
-            box-shadow: 0 6px 0 var(--border-black);
+            font-size: 1.1rem;
+            box-shadow: 0 5px 0 var(--border-black);
             text-shadow: 2px 2px 0 var(--border-black);
             transition: 0.1s;
             cursor: default;
@@ -458,16 +474,16 @@
 
         .skill-box:hover {
             transform: translateY(2px);
-            box-shadow: 0 4px 0 var(--border-black);
+            box-shadow: 0 3px 0 var(--border-black);
             background-color: #33ccff;
         }
 
         /* PROJECTS & STUDIO SHOWCASE */
         .projects-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
-            gap: 25px;
-            padding: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            padding: 25px;
             background-color: #3d4045;
         }
 
@@ -491,7 +507,7 @@
             border-radius: 6px;
             display: inline-block;
             margin-bottom: 12px;
-            font-size: 1.1rem;
+            font-size: 1rem;
             box-shadow: 2px 2px 0 var(--border-black);
             text-shadow: 1px 1px 0 var(--border-black);
             align-self: flex-start;
@@ -499,14 +515,15 @@
 
         .project-card h3 { 
             font-family: var(--font-heading); 
-            font-size: 1.8rem; 
+            font-size: 1.6rem; 
             margin-bottom: 8px;
             color: #005f99;
+            line-height: 1.2;
         }
         
         .project-card p { 
             font-weight: 600; 
-            font-size: 1rem; 
+            font-size: 0.95rem; 
             margin-bottom: 16px;
             flex-grow: 1;
         }
@@ -554,101 +571,165 @@
         .contact-panel {
             background-color: var(--panel-green);
             text-align: center;
-            padding: 50px 20px;
+            padding: 40px 20px;
         }
 
         .contact-panel h2 { 
             font-family: var(--font-heading); 
-            font-size: 3.2rem; 
+            font-size: 2.8rem; 
             margin-bottom: 12px; 
             color: var(--text-white);
         }
         
         .contact-panel p { 
             color: var(--text-white); 
-            font-size: 1.3rem; 
+            font-size: 1.1rem; 
             font-weight: 600;
             margin-bottom: 25px; 
             text-shadow: 2px 2px 0 var(--border-black);
         }
 
         .email-box {
-            display: inline-block;
-            padding: 16px 36px;
+            display: block;
+            padding: 15px 20px;
             background-color: var(--text-white);
             border: 4px solid var(--border-black);
             border-radius: 8px;
             font-family: var(--font-heading);
-            font-size: 1.6rem;
+            font-size: 1.2rem;
             color: var(--text-black);
             text-decoration: none;
-            box-shadow: 0 8px 0 var(--border-black);
+            box-shadow: 0 6px 0 var(--border-black);
             transition: 0.1s;
+            word-break: break-all;
+            margin: 0 auto;
+            max-width: 500px;
         }
 
-        .email-box:hover {
+        .email-box:hover, .email-box:active {
             transform: translateY(2px);
-            box-shadow: 0 6px 0 var(--border-black);
+            box-shadow: 0 4px 0 var(--border-black);
             background-color: var(--panel-yellow);
         }
 
         /* FOOTER */
         footer {
             text-align: center;
-            padding: 25px;
+            padding: 20px;
             background-color: var(--text-white);
             border-top: 4px solid var(--border-black);
             color: var(--text-black);
             font-family: var(--font-heading);
-            font-size: 1.2rem;
+            font-size: 1rem;
         }
 
         /* --- MUSIC TOGGLE BUTTON --- */
         .music-btn {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
+            bottom: 15px;
+            right: 15px;
             z-index: 9999;
             background-color: var(--panel-yellow);
             color: var(--text-black);
             font-family: var(--font-heading);
-            font-size: 1.2rem;
-            padding: 10px 20px;
+            font-size: 1rem;
+            padding: 8px 15px;
             border: 4px solid var(--border-black);
             border-radius: 8px;
-            box-shadow: 0 6px 0 var(--border-black);
+            box-shadow: 0 5px 0 var(--border-black);
             cursor: pointer;
             transition: 0.1s;
             text-transform: uppercase;
-            display: none; /* Hidden until start screen is clicked */
+            display: none; 
         }
 
-        .music-btn.show {
-            display: block;
-        }
+        .music-btn.show { display: block; }
 
-        .music-btn:hover {
+        .music-btn:hover, .music-btn:active {
             transform: translateY(2px);
-            box-shadow: 0 4px 0 var(--border-black);
+            box-shadow: 0 3px 0 var(--border-black);
             background-color: #ffe066;
         }
 
-        .music-btn:active {
-            transform: translateY(6px);
-            box-shadow: 0 0px 0 var(--border-black);
-        }
-
-        /* --- RESPONSIVE --- */
-        @media (max-width: 968px) {
-            .start-title { font-size: 2.5rem; }
-            .start-btn { font-size: 1.8rem !important; padding: 15px 40px !important; }
-            .hero { flex-direction: column-reverse; text-align: center; padding-top: 40px;}
-            .hero-text h1 { font-size: 3.2rem; }
-            .btn-group { justify-content: center; flex-wrap: wrap; }
+        /* --- TABLET RESPONSIVE STYLES --- */
+        @media (max-width: 900px) {
+            .hero {
+                flex-direction: column-reverse;
+                text-align: center;
+                padding-top: 30px;
+            }
+            .hero-text h1 { font-size: 3rem; }
+            .hero-text p { margin: 0 auto 25px auto; }
+            .btn-group { justify-content: center; }
             .bento-grid { grid-template-columns: 1fr; }
             .bento-item.large { grid-column: span 1; }
-            nav { padding: 15px; flex-direction: column; gap: 15px; }
-            .nav-links { flex-wrap: wrap; justify-content: center; }
+        }
+
+        /* --- MOBILE RESPONSIVE STYLES --- */
+        @media (max-width: 600px) {
+            /* Start Screen Mobile */
+            .start-title { font-size: 2.5rem; }
+            .start-btn { font-size: 1.8rem !important; padding: 15px 20px !important; }
+            
+            /* Navbar Mobile (Menu System) */
+            nav { padding: 12px 5%; }
+            .logo { font-size: 1.6rem; }
+            
+            /* Show Hamburger, Hide Desktop Links */
+            .hamburger { display: block; }
+            
+            .nav-links {
+                display: none; /* Hidden by default */
+                position: absolute;
+                top: 100%; /* Directly below navbar */
+                left: 0;
+                width: 100%;
+                background-color: var(--text-white);
+                border-bottom: 4px solid var(--border-black);
+                flex-direction: column;
+                padding: 15px;
+                gap: 12px;
+                box-shadow: 0 8px 0 rgba(0,0,0,0.2);
+                z-index: 999;
+            }
+            
+            /* Menu Open State */
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links a {
+                width: 100%;
+                text-align: center;
+                font-size: 1.1rem;
+                padding: 12px;
+            }
+            
+            /* Typography Mobile */
+            .hero-text h1 { font-size: 2.3rem; }
+            .hero-text h2 { font-size: 1.4rem; }
+            .hero-text p { font-size: 1rem; padding: 12px; }
+            
+            /* Buttons Mobile */
+            .btn-group { flex-direction: column; width: 100%; gap: 12px; }
+            .btn { width: 100%; font-size: 1.2rem; padding: 12px 10px; }
+            
+            /* Profile Card Mobile */
+            .profile-container { width: 100%; max-width: 320px; margin: 0 auto; }
+            .card-header { font-size: 1.3rem; }
+            
+            /* Sections Mobile */
+            section { padding: 20px 3%; }
+            .ui-header { font-size: 1.5rem; }
+            .bento-grid, .skills-grid, .projects-grid { padding: 15px; gap: 15px; }
+            .skill-box { font-size: 1rem; padding: 10px; }
+            
+            /* Contact Mobile */
+            .contact-panel h2 { font-size: 2rem; }
+            .email-box { font-size: 1rem; padding: 12px 10px; }
+            
+            /* Music Button Mobile */
+            .music-btn { bottom: 10px; right: 10px; font-size: 0.85rem; padding: 6px 12px; }
         }
     </style>
 </head>
@@ -656,9 +737,9 @@
 
     <!-- 1. START SCREEN OVERLAY -->
     <div id="start-screen">
-        <h1 class="start-title">GAME DEV CHRISTOPHER</h1>
+        <h1 class="start-title">GAME DEV<br>CHRISTOPHER</h1>
         <button id="start-btn" class="btn btn-primary start-btn">▶ PLAY / ENTER</button>
-        <p class="start-subtitle">Click to enable audio & enter the portfolio</p>
+        <p class="start-subtitle">Tap to enable audio & enter</p>
     </div>
 
     <!-- 2. MAIN CONTENT (Hidden initially) -->
@@ -676,10 +757,15 @@
         <!-- NAVIGATION -->
         <nav>
             <div class="logo">Game Dev Christopher</div>
-            <div class="nav-links">
+            
+            <!-- Mobile Menu Button -->
+            <button class="hamburger" id="hamburger">☰</button>
+            
+            <!-- Navigation Links (Dropdown on Mobile) -->
+            <div class="nav-links" id="nav-links">
                 <a href="#about">Profile</a>
                 <a href="#skills">Skills</a>
-                <a href="#projects">Experiences</a>
+                <a href="#projects">Showcase</a>
                 <a href="#contact">Connect</a>
             </div>
         </nav>
@@ -800,7 +886,7 @@
         <section id="contact">
             <div class="ui-panel contact-panel">
                 <h2 class="text-stroke">Contact Me</h2>
-                <p>Looking for a dedicated game developer or an IT professional? Let's build something great together.</p>
+                <p>Looking for a dedicated game developer? Let's build something great together.</p>
                 
                 <a href="mailto:christopherarenas20040706@gmail.com" class="email-box">
                     christopherarenas20040706@gmail.com
@@ -815,8 +901,9 @@
 
     </div> <!-- End Main Content -->
 
-    <!-- JAVASCRIPT FOR START SCREEN & MUSIC -->
+    <!-- JAVASCRIPT FOR START SCREEN, MUSIC, & MOBILE MENU -->
     <script>
+        // --- 1. START SCREEN & MUSIC ---
         const startScreen = document.getElementById('start-screen');
         const startBtn = document.getElementById('start-btn');
         const mainContent = document.getElementById('main-content');
@@ -825,12 +912,9 @@
         
         let isPlaying = false;
 
-        // Set volume to 30%
         bgMusic.volume = 0.3;
 
-        // When the user clicks "PLAY / ENTER"
         startBtn.addEventListener('click', () => {
-            // 1. Play Music
             bgMusic.play().then(() => {
                 isPlaying = true;
                 musicBtn.innerText = '🎵 Music: ON';
@@ -838,16 +922,13 @@
                 console.log("Audio play failed:", err);
             });
 
-            // 2. Hide Start Screen
             startScreen.classList.add('hidden');
-
-            // 3. Show Main Content & Music Button
             mainContent.classList.add('visible');
             musicBtn.classList.add('show');
         });
 
-        // Manual Music Toggle
-        musicBtn.addEventListener('click', () => {
+        musicBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
             if (isPlaying) {
                 bgMusic.pause();
                 musicBtn.innerText = '🎵 Music: OFF';
@@ -857,6 +938,22 @@
                 musicBtn.innerText = '🎵 Music: ON';
                 isPlaying = true;
             }
+        });
+
+        // --- 2. MOBILE HAMBURGER MENU ---
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('nav-links');
+
+        // Toggle menu on click
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Close menu when a link is clicked
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+            });
         });
     </script>
 </body>
